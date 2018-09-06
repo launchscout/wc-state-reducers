@@ -1,5 +1,5 @@
 {
-  "name": "@superchris/reduxish",
+  "name": "wc-fluxish",
   "version": "0.0.1",
   "description": "A very small state management library for web components",
   "main": "dist/index.js",

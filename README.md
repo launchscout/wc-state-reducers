@@ -1,13 +1,13 @@
-# reduxish
+# wc-fluxish
 
-Reduxish is a very small library for managing state in an application built with 
+wc-fluxish is a very small library for managing state in an application built with 
 web components. It roughly follows the flux pattern. It expects web components to:
 
 * get data passed to them via properties or attributes
 * render appropriately when new data is given to them
 * emit custom events when something happens that may change state
 
-Reduxish uses Custom Events in place of actions. It emits a custom event, `stateChange` on new state changes. It exports two functions:
+wc-fluxish uses Custom Events in place of actions. It emits a custom event, `stateChange` on new state changes. It exports two functions:
 
 `connect(reducers, subscribers)`
 
