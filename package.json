@@ -1,5 +1,5 @@
 {
-  "name": "reduxish",
+  "name": "@superchris/reduxish",
   "version": "0.0.1",
   "description": "A very small state management library for web components",
   "main": "dist/index.js",
@@ -7,6 +7,7 @@
   "module": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack.conf.js",
+    "prepublish": "npm run build",
     "test": "karma start --singleRun"
   },
   "author": "Chris Nelson",
