@@ -25,8 +25,32 @@ describe('connect', () => {
     connect({ foo }, {});
     dispatch('foo', {bar: 'baz'});
     setTimeout(() => {
-      console.log(states);
       expect(states.pop().bar).to.equal('baz');
+      done();
+    });
+  });
+
+  it("calls subscribers", (done) => {
+    const sandbox = document.createElement('div');
+    sandbox.setAttribute('id', 'sandbox');
+    document.body.appendChild(sandbox);
+    let calledSubscriber = false;
+    let calledSubscriberWithoutElement = false;
+    const subcribers = {
+      "#sandbox": (state, el) => {
+        calledSubscriber = true;
+      },
+      "#notfound": (state, el) => {
+        calledSubscriberWithoutElement = true;
+      }
+    };
+    const foo = (state, { bar }) => {
+      return Object.assign({}, state, {bar});
+    }
+    connect({ foo }, subcribers)
+    setTimeout(() => {
+      expect(calledSubscriber).to.be.true;
+      expect(calledSubscriberWithoutElement).to.be.false;
       done();
     });
   });

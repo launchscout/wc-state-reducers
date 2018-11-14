@@ -1,6 +1,6 @@
 {
   "name": "wc-fluxish",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A very small state management library for web components",
   "main": "dist/index.js",
   "source": "src/index.js",

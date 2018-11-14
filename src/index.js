@@ -18,7 +18,7 @@ export const connect = (reducers, subscribers, initialState = {}) => {
   Object.keys(subscribers).forEach((key) => {
     document.addEventListener('stateChange', ({detail: state}) => {
       const element = document.querySelector(key);
-      subscribers[key](state, element);
+      if (element) { subscribers[key](state, element); }
     });
   });
 
