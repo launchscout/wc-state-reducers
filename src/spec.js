@@ -1,4 +1,4 @@
-import { connect, dispatch } from './index.js';
+import { createStore, dispatch } from './index.js';
 import { expect } from 'chai';
 
 describe('dispatch', () => {
@@ -7,38 +7,46 @@ describe('dispatch', () => {
   });
 });
 
-describe('connect', () => {
+describe('createStore', () => {
   const states = [];
+  let sandbox;
   before(() => {
-    document.addEventListener('stateChange', ({detail: state}) => {
-      states.push(state);
-    })
+    sandbox = document.createElement('div');
+    sandbox.setAttribute('id', 'sandbox');
+    document.body.appendChild(sandbox);
   });
+
   afterEach(() => {
+    sandbox.innerHTML = '';
     states.splice(0, states.length);
   });
 
   it('calls reducers and builds a new state', (done) => {
+    const element = document.createElement('div');
+    sandbox.appendChild(element);
     const foo = (state, { bar }) => {
       return Object.assign({}, state, {bar});
     }
-    connect({ foo }, {});
-    dispatch('foo', {bar: 'baz'});
+    const store = createStore(element, { foo }, {});
+    dispatch(element, 'foo', {bar: 'baz'});
     setTimeout(() => {
-      expect(states.pop().bar).to.equal('baz');
+      expect(store.state.bar).to.equal('baz');
       done();
     });
   });
 
-  it("calls subscribers", (done) => {
-    const sandbox = document.createElement('div');
-    sandbox.setAttribute('id', 'sandbox');
-    document.body.appendChild(sandbox);
+  it("calls subscribers for matched selectors", (done) => {
+    const element = document.createElement('div');
+    sandbox.appendChild(element);
+    const subscriberElement = document.createElement('div');
+    subscriberElement.setAttribute('id', 'subscriber');
+    element.appendChild(subscriberElement)
     let calledSubscriber = false;
     let calledSubscriberWithoutElement = false;
-    const subcribers = {
-      "#sandbox": (state, el) => {
+    const subscribers = {
+      "#subscriber": ({ bar }, el) => {
         calledSubscriber = true;
+        el.setAttribute("bar", bar)
       },
       "#notfound": (state, el) => {
         calledSubscriberWithoutElement = true;
@@ -47,29 +55,34 @@ describe('connect', () => {
     const foo = (state, { bar }) => {
       return Object.assign({}, state, {bar});
     }
-    connect({ foo }, subcribers)
+    createStore(element, { foo }, subscribers);
+    dispatch(element, 'foo', {bar: 'baz'});
     setTimeout(() => {
+      debugger;
       expect(calledSubscriber).to.be.true;
+      expect(subscriberElement.getAttribute('bar')).to.equal('baz');
       expect(calledSubscriberWithoutElement).to.be.false;
       done();
     });
   });
-  
+
   it('preserves new state with multiple events', (done) => {
+    const element = document.createElement('div');
+    sandbox.appendChild(element);
     const foo = (state, { foo }) => {
       return Object.assign({}, state, {foo});
     }
     const bar = (state, { bar }) => {
       return Object.assign({}, state, {bar});
     }
-    connect({ foo, bar }, {});
-    dispatch('foo', {foo: 'bar'});
+    const store = createStore(element, { foo, bar }, {});
+    dispatch(element, 'foo', {foo: 'bar'});
     setTimeout(() => {
-      const state = states.pop(); 
-      expect(state.foo).to.equal('bar');
-      expect(state.bar).to.equal('foo');
+      expect(store.state.foo).to.equal('bar');
+      expect(store.state.bar).to.equal('foo');
       done();
     });
-    dispatch('bar', {bar: 'foo'});
+    dispatch(element, 'bar', {bar: 'foo'});
   });
+
 });
