@@ -22,3 +22,7 @@ It also exports:
 `dispatch(element, name, eventDetail)`
 
 This is a lil helper function which dispatches a bubbling custom event (this is important!) with the specified name and detail.
+
+## Example
+
+To see it in action: https://github.com/gaslight/wc-state-reducers-example
