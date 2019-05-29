@@ -27,4 +27,6 @@ This is a lil helper function which dispatches a bubbling custom event (this is 
 
 ## Example
 
-To see it in action: https://github.com/gaslight/wc-state-reducers-example
+To see it in action: 
+* [Total Weight](https://github.com/gaslight/wc-state-reducers-example)
+* [Tic Tac Toe](https://github.com/gaslight/litelement-tic-tac-toe)
