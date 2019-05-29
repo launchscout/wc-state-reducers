@@ -35,33 +35,19 @@ describe('createStore', () => {
     });
   });
 
-  it("calls subscribers for matched selectors", (done) => {
+  it("calls subscribers", (done) => {
     const element = document.createElement('div');
     sandbox.appendChild(element);
     const subscriberElement = document.createElement('div');
-    subscriberElement.setAttribute('id', 'subscriber');
-    element.appendChild(subscriberElement)
-    let calledSubscriber = false;
-    let calledSubscriberWithoutElement = false;
-    const subscribers = {
-      "#subscriber": ({ bar }, el) => {
-        calledSubscriber = true;
-        el.setAttribute("bar", bar)
-      },
-      "#notfound": (state, el) => {
-        calledSubscriberWithoutElement = true;
-      }
-    };
     const foo = (state, { bar }) => {
       return Object.assign({}, state, {bar});
     }
-    createStore(element, { foo }, subscribers);
+    const store = createStore(element, { foo });
+    let subscribedBar;
+    store.subscribe(({ bar }) => { subscribedBar = bar;});
     dispatch(element, 'foo', {bar: 'baz'});
     setTimeout(() => {
-      debugger;
-      expect(calledSubscriber).to.be.true;
-      expect(subscriberElement.getAttribute('bar')).to.equal('baz');
-      expect(calledSubscriberWithoutElement).to.be.false;
+      expect(subscribedBar).to.equal('baz');
       done();
     });
   });

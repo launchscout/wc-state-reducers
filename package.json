@@ -1,6 +1,6 @@
 {
   "name": "wc-state-reducers",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A very small state management library for web components",
   "main": "dist/index.js",
   "source": "src/index.js",
